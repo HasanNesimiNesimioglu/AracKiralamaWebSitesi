@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<center style="background-color: #156CE1;">
+		<h1>
+			<font color="white"> <b> H/N ARAÇ KİRALAMA</b></font>
+		</h1>
+	</center>
+</h:head>
+<body id="bodyIndex">
+
+
+	<f:view>
+		<h:form id="YGirisFormPanel">
+
+			<p:menubar>
+				<p:menuitem value="Ana Sayfa" outcome="/index" />
+				<p:menuitem value="Araçlar" outcome="/araclar" />
+				<p:menuitem value="İletişim" outcome="/iletisim" />
+				<f:facet name="options">
+					<div class="ui-input-icon-left p-mr-2">
+						<p:menuButton
+							value="#{yoneticiView.yonetici.ad} #{yoneticiView.yonetici.soyad}"
+							rendered="#{yoneticiView.yonetici.ad!=null}"
+							icon="pi pi-fw pi-user" style="width:100%;">
+							<p:menuitem value="bilgilerim" icon="pi pi-fw pi-pencil" outcome="/yoneticiprofil"/>
+							<p:menuitem value="çıkış" ajax="false"
+								action="#{yoneticiView.cikis()}" update="YGirisFormPanel"
+								icon="pi pi-fw pi-power-off" />
+						</p:menuButton>
+					</div>
+				</f:facet>
+			</p:menubar>
+		</h:form>
+		
+		<center>
+			<h:form id="girisForm" style="margin-top:50px;">
+
+				<h:panelGrid columns="1">
+
+					<p:inputText placeholder="E-Posta" id="email"
+						value="#{yoneticiView.yonetici.eposta}" required="true"
+						label="Email" validatorMessage="Geçersiz E-Posta Adresi">
+						<f:validateRegex
+							pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
+					</p:inputText>
+					<p:message for="email" />
+					<p:password value="#{yoneticiView.yonetici.sifre}" required="true"
+						placeholder="Şifre" />
+					<p:outputLabel value="Geçersiz Kullanıcı Adı veya Şifre"
+						rendered="#{yoneticiView.girisKontrol==true}"
+						style="color:#D00207;" />
+					<p:commandButton action="#{yoneticiView.girisYap()}"
+						value="Giriş Yap" update="girisForm" style="margin-top:10px;" />
+
+				</h:panelGrid>
+			</h:form>
+		</center>
+
+
+
+	</f:view>
+</body>
+</html>

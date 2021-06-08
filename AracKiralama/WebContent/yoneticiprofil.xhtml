@@ -1,0 +1,153 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<center style="background-color: #156CE1;">
+		<h1>
+			<font color="white"> <b> H/N ARAÇ KİRALAMA</b></font>
+		</h1>
+	</center>
+</h:head>
+
+<body>
+	<f:view>
+
+		<h:form id="hYPanel">
+
+			<p:menubar>
+				<p:menuitem value="Ana Sayfa" outcome="/index" />
+				<p:menuitem value="Araçlar" outcome="/araclar" />
+				<p:menuitem value="İletişim" outcome="/iletisim" />
+				<f:facet name="options">
+					<div class="ui-input-icon-left p-mr-2">
+						<p:menuButton
+							value="#{yoneticiView.yonetici.ad} #{yoneticiView.yonetici.soyad}"
+							rendered="#{yoneticiView.yonetici.ad!=null}"
+							icon="pi pi-fw pi-user" style="width:100%;">
+							<p:menuitem value="bilgilerim" icon="pi pi-fw pi-pencil"
+								outcome="/yoneticiprofil" />
+							<p:menuitem value="çıkış" ajax="false"
+								action="#{yoneticiView.cikis()}" update="YUyeFormPanel"
+								icon="pi pi-fw pi-power-off" />
+						</p:menuButton>
+					</div>
+				</f:facet>
+			</p:menubar>
+
+		</h:form>
+
+		<h:form id="yoneticiBilgi"
+			rendered="#{yoneticiView.yonetici.ad!=null}">
+
+			<p:growl id="messages" showDetail="true" />
+
+			<p:dataTable value="#{yoneticiView.yonetici}" var="profil"
+				editable="true">
+				<f:facet name="header">Profilim</f:facet>
+
+				<p:ajax event="rowEdit" listener="#{yoneticiView.onRowEdit}"
+					update="yoneticiBilgi:messages" />
+				<p:ajax event="rowEditCancel" listener="#{yoneticiView.onRowCancel}"
+					update="yoneticiBilgi:messages" />
+
+				<p:column headerText="Yönetici ID">
+					<h:outputText value="#{profil.yoneticiID}" />
+				</p:column>
+
+				<p:column headerText="Ad">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{profil.ad}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText value="#{profil.ad}" />
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+				<p:column headerText="Soyad">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{profil.soyad}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText value="#{profil.soyad}" />
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+				<p:column headerText="Telefon">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{profil.telefon}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText value="#{profil.telefon}" />
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+				<p:column headerText="E-Posta">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{profil.eposta}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText value="#{profil.eposta}" />
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+				<p:column headerText="Şifre">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{profil.sifre}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText value="#{profil.sifre}" />
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+				<p:column headerText="Düzenle" style="width:6rem">
+					<p:rowEditor editTitle="Düzenle" cancelTitle="İptal"
+						saveTitle="Kaydet" />
+				</p:column>
+
+			</p:dataTable>
+
+			<p:dataTable value="#{yoneticiView.yoneticiListesi}" var="yonetici">
+				<f:facet name="header">Yönetici Listesi</f:facet>
+
+
+				<p:column headerText="Yönetici ID">
+					<h:outputText value="#{yonetici.yoneticiID}" />
+				</p:column>
+
+				<p:column headerText="Ad">
+					<h:outputText value="#{yonetici.ad}" />
+				</p:column>
+
+				<p:column headerText="Soyad">
+					<h:outputText value="#{yonetici.soyad}" />
+				</p:column>
+
+				<p:column headerText="Telefon">
+					<h:outputText value="#{yonetici.telefon}" />
+				</p:column>
+
+				<p:column headerText="E-Posta">
+					<h:outputText value="#{yonetici.eposta}" />
+				</p:column>
+
+			</p:dataTable>
+		</h:form>
+
+	</f:view>
+</body>
+</html>

@@ -1,0 +1,218 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<center style="background-color: #156CE1;">
+		<h1>
+			<font color="white"> <b> H/N ARAÇ KİRALAMA</b></font>
+		</h1>
+	</center>
+</h:head>
+<body>
+	<f:view>
+		<h:form id="YAracFormPanel">
+
+			<p:menubar>
+				<p:menuitem value="Ana Sayfa" outcome="/index" />
+				<p:menuitem value="Araçlar" outcome="/araclar" />
+				<p:menuitem value="İletişim" outcome="/iletisim" />
+				<f:facet name="options">
+					<div class="ui-input-icon-left p-mr-2">
+						<p:menuButton
+							value="#{yoneticiView.yonetici.ad} #{yoneticiView.yonetici.soyad}"
+							rendered="#{yoneticiView.yonetici.ad!=null}"
+							icon="pi pi-fw pi-user" style="width:100%;">
+							<p:menuitem value="bilgilerim" icon="pi pi-fw pi-pencil"
+								outcome="/yoneticiprofil" />
+							<p:menuitem value="çıkış" ajax="false"
+								action="#{yoneticiView.cikis()}" update="YAracFormPanel"
+								icon="pi pi-fw pi-power-off" />
+						</p:menuButton>
+					</div>
+				</f:facet>
+			</p:menubar>
+		</h:form>
+
+		<h:form id="hArabaEkle">
+
+			<p align="right">
+				<p:button value="Geri Dön" outcome="/yoneticipanel" />
+			</p>
+			<p align="center">
+				<p:outputLabel value="Araç Ekle/Düzenle" style="font-size:30px;" />
+			</p>
+
+			<p:panelGrid columns="6" styleClass="ui-noborder">
+
+				<p:inputText placeholder="Marka" value="#{aracView.arac.marka}"
+					required="true" />
+				<p:inputText placeholder="Motor" value="#{aracView.arac.motor}"
+					required="true" />
+
+				<p:outputLabel value="Koltuk Sayısı:" style="font-weight:bold;" />
+				<p:spinner value="#{aracView.arac.koltukSayisi}" min="1" max="50"
+					required="true" />
+
+				<p:outputLabel value="Günlük Kiralama Ücreti:"
+					style="font-weight:bold;" />
+				<p:spinner value="#{aracView.arac.ucret}" min="0" required="true" />
+			</p:panelGrid>
+
+			<p:panelGrid columns="4" styleClass="ui-noborder">
+
+				<p:outputLabel value="Şanzıman Türü:" style="font-weight:bold;" />
+
+				<p:selectOneRadio id="RadioSanziman"
+					value="#{aracView.arac.sanziman}" unselectable="Manuel"
+					required="true">
+					<f:selectItem itemLabel="Manuel" itemValue="Manuel" />
+					<f:selectItem itemLabel="Otomatik" itemValue="Otomatik" />
+				</p:selectOneRadio>
+
+				<p:outputLabel id="RadioYakit" value="Yakıt Türü:"
+					style="font-weight:bold;" />
+				<p:selectOneRadio value="#{aracView.arac.yakitTuru}"
+					unselectable="Dizel" required="true">
+					<f:selectItem itemLabel="Dizel" itemValue="Dizel" />
+					<f:selectItem itemLabel="Benzin" itemValue="Benzin" />
+				</p:selectOneRadio>
+
+			</p:panelGrid>
+
+			<p:panelGrid columns="2" styleClass="ui-noborder">
+
+				<p:fileUpload label="Fotoğraf Seçiniz" value="#{aracView.resim}"
+					mode="simple" skinSimple="true" auto="true" process="@this"
+					update="messages" listener="#{aracView.handleFileUpload}"
+					required="true" />
+				<p:growl id="messages" showDetail="true" />
+
+				<p:commandButton action="#{aracView.kaydet()}" value="Aracı Kaydet"
+					rendered="#{aracView.arac.marka==null}" update="hArabaEkle" />
+
+			</p:panelGrid>
+
+		</h:form>
+
+		<h:form id="hAracTablosu">
+
+			<p:growl id="messages" showDetail="true" />
+
+			<p:dataTable value="#{aracView.aracListesi}" var="arac"
+				editable="true" showGridlines="true">
+
+				<f:facet name="header">Araç Listesi</f:facet>
+
+				<p:ajax event="rowEdit" listener="#{aracView.onRowEdit}"
+					update="hAracTablosu:messages" />
+				<p:ajax event="rowEditCancel" listener="#{aracView.onRowCancel}"
+					update="hAracTablosu:messages" />
+
+
+
+				<p:column headerText="Fotoğraf">
+					<p:graphicImage value="#{arac.aracResimUzantisi}" width="300px"
+						height="113px" />
+				</p:column>
+
+				<p:column headerText="ID" filterBy="#{arac.aracID}">
+					<f:facet name="header" />
+					<h:outputText value="#{arac.aracID}" />
+				</p:column>
+
+				<p:column headerText="Marka" filterBy="#{arac.marka}">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{arac.marka}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText value="#{arac.marka}" />
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+				<p:column headerText="Motor" filterBy="#{arac.motor}">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{arac.motor}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText value="#{arac.motor}" />
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+				<p:column headerText="Şanzıman" filterBy="#{arac.sanziman}">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{arac.sanziman}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:selectOneRadio id="RadioSanziman" value="#{arac.sanziman}"
+								unselectable="Manuel">
+								<f:selectItem itemLabel="Manuel" itemValue="Manuel" />
+								<f:selectItem itemLabel="Otomatik" itemValue="Otomatik" />
+							</p:selectOneRadio>
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+				<p:column headerText="Yakıt Türü" filterBy="#{arac.yakitTuru}">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{arac.yakitTuru}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:selectOneRadio value="#{arac.yakitTuru}" unselectable="Dizel">
+								<f:selectItem itemLabel="Dizel" itemValue="Dizel" />
+								<f:selectItem itemLabel="Benzin" itemValue="Benzin" />
+							</p:selectOneRadio>
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+				<p:column headerText="Koltuk Sayısı" filterBy="#{arac.koltukSayisi}">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{arac.koltukSayisi}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText value="#{arac.koltukSayisi}" />
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+				<p:column headerText="Günlük Ücret" filterBy="#{arac.ucret}">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{arac.ucret}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText value="#{arac.ucret}" />
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+				<p:column headerText="Düzenle" style="width:6rem">
+					<p:rowEditor editTitle="Düzenle" cancelTitle="İptal"
+						saveTitle="Kaydet" />
+				</p:column>
+
+				<p:column headerText="Kayıt Sil">
+					<p:commandLink action="#{aracView.sil()}" value="Sil"
+						update="hAracTablosu">
+						<f:setPropertyActionListener value="#{arac}"
+							target="#{aracView.arac}" />
+					</p:commandLink>
+				</p:column>
+
+			</p:dataTable>
+
+
+		</h:form>
+	</f:view>
+</body>
+</html>

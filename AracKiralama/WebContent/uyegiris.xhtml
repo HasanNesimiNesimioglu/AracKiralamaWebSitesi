@@ -1,0 +1,122 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<body style="background-color: #EFF1F3;" id="bodyIndex">
+	<!-- Üst Metin -->
+	<h:head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<center style="background-color: #156CE1;">
+			<h1>
+				<font color="white"> <b> H/N ARAÇ KİRALAMA</b></font>
+			</h1>
+		</center>
+	</h:head>
+	<f:view>
+		<!-- ~~~~Üst Panel~~~~ -->
+		<h:form id="hGirisPanel">
+			<p:menubar>
+				<p:menuitem value="Ana Sayfa" outcome="/index" />
+				<p:menuitem value="Araçlar" outcome="/araclar" />
+				<p:menuitem value="İletişim" outcome="/iletisim" />
+				<p:menuitem value="Üye Ol/Giriş Yap" outcome="/uyegiris"
+					rendered="#{uyeView.uye.ad==null}" />
+				<p:menuitem value="Yönetici Girişi" outcome="/yoneticigiris" />
+				<f:facet name="options">
+					<div class="ui-input-icon-left p-mr-2">
+						<p:menuButton value="#{uyeView.uye.ad} #{uyeView.uye.soyad}"
+							rendered="#{uyeView.uye.ad!=null}" icon="pi pi-fw pi-user"
+							style="width:100%;">
+							<p:menuitem value="bilgilerim" icon="pi pi-fw pi-pencil"
+								outcome="/uyeprofil" />
+							<p:menuitem value="kiraladığım araçlar"
+								icon="pi pi-fw pi-calendar" outcome="/uyearaclar" />
+							<p:menuitem value="çıkış" ajax="false"
+								action="#{uyeView.cikis()}" update="hGirisPanel"
+								icon="pi pi-fw pi-power-off" />
+						</p:menuButton>
+					</div>
+				</f:facet>
+			</p:menubar>
+		</h:form>
+
+		<center>
+
+			<!-- ~~~~Üye Kayıt Paneli~~~~ -->
+			<h:panelGrid columns="2">
+				<h:form>
+					<h3>Kayıt Ol</h3>
+				</h:form>
+				<h:form>
+					<h3>Giriş Yap</h3>
+				</h:form>
+				<h:form id="kayitForm">
+					<h:panelGrid columns="1" style="margin-top:10%;margin-right:10%;">
+
+						<p:inputText placeholder="Ad" value="#{uyeView.uye.ad}"
+							required="true" />
+
+						<p:inputText placeholder="Soyad" value="#{uyeView.uye.soyad}"
+							required="true" />
+
+						<p:inputText placeholder="E-Posta" id="email"
+							value="#{uyeView.uye.eposta}" required="true" label="Email"
+							validatorMessage="Geçersiz E-Posta Adresi">
+							<f:validateRegex
+								pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
+						</p:inputText>
+						<p:message for="email" />
+
+						<p:inputMask id="phone" value="#{uyeView.uye.telefon}"
+							placeholder="Telefon" mask="(999) 999-9999" validateMask="true"
+							required="true" />
+
+						<p:datePicker value="#{uyeView.uye.dogumtarihi}" required="true"
+							placeholder="Doğum Tarihi" />
+
+						<p:password value="#{uyeView.uye.sifre}" required="true"
+							placeholder="Şifre" />
+
+						<p:password value="#{uyeView.sifreKontrol}" required="true"
+							placeholder="Şifre Tekrar" />
+
+						<p align="right">
+							<p:commandButton action="#{uyeView.kayitOl()}" value="Kayıt Ol"
+								update="messages" />
+						</p>
+						<p:growl id="messages" showDetail="true" />
+					</h:panelGrid>
+				</h:form>
+
+				<h:form id="girisForm">
+					<h:panelGrid columns="1" style="margin-bottom:120%;">
+
+						<p:inputText placeholder="E-Posta" id="email"
+							value="#{uyeView.uye.eposta}" required="true" label="Email"
+							validatorMessage="Geçersiz E-Posta Adresi">
+							<f:validateRegex
+								pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
+						</p:inputText>
+
+						<p:message for="email" />
+
+						<p:password value="#{uyeView.uye.sifre}" required="true"
+							placeholder="Şifre" />
+
+						<p:commandButton update="messages"
+							action="#{uyeView.girisYap()}" value="Giriş Yap" />
+
+						<p:growl id="messages" showDetail="true" />
+
+					</h:panelGrid>
+				</h:form>
+
+			</h:panelGrid>
+
+		</center>
+	</f:view>
+</body>
+</html>

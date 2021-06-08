@@ -1,0 +1,111 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<center style="background-color: #156CE1;">
+		<h1>
+			<font color="white"> <b> H/N ARAÇ KİRALAMA</b></font>
+		</h1>
+	</center>
+</h:head>
+<body>
+	<f:view>
+
+		<h:form id="hkiralaPanel">
+			<p:menubar>
+				<p:menuitem value="Ana Sayfa" outcome="/index" />
+				<p:menuitem value="Araçlar" outcome="/araclar" />
+				<p:menuitem value="İletişim" outcome="/iletisim" />
+				<p:menuitem value="Üye Ol/Giriş Yap" outcome="/uyegiris"
+					rendered="#{uyeView.uye.ad==null}" />
+				<p:menuitem value="Yönetici Girişi" outcome="/yoneticigiris" />
+				<f:facet name="options">
+					<div class="ui-input-icon-left p-mr-2">
+						<p:menuButton value="#{uyeView.uye.ad} #{uyeView.uye.soyad}"
+							rendered="#{uyeView.uye.ad!=null}" icon="pi pi-fw pi-user"
+							style="width:100%;">
+							<p:menuitem value="bilgilerim" icon="pi pi-fw pi-pencil"
+								outcome="/uyeprofil" />
+							<p:menuitem value="kiraladığım araçlar"
+								icon="pi pi-fw pi-calendar" outcome="/uyearaclar" />
+							<p:menuitem value="çıkış" ajax="false"
+								action="#{uyeView.cikis()}" update="hkiralaPanel"
+								icon="pi pi-fw pi-power-off" />
+						</p:menuButton>
+					</div>
+				</f:facet>
+			</p:menubar>
+		</h:form>
+
+		<h:form id="kiralaForm" rendered="#{uyeView.uye.ad!=null}">
+			<p:dataTable id="tablokirala" value="#{aracView.arac}" var="arac"
+				style="margin-top:50px;">
+				<f:facet name="header">Kiralanan Araç</f:facet>
+
+				<p:column headerText="Seçilen Araç">
+
+					<p:panelGrid columns="1" styleClass="ui-noborder">
+
+						<h:graphicImage value="#{arac.aracResimUzantisi}" width="300px"
+							height="113px" />
+						<h:outputText value="Marka: #{arac.marka}" />
+						<h:outputText value="Motor: #{arac.motor}" />
+						<h:outputText value="Şanzıman: #{arac.sanziman}" />
+						<h:outputText value="Yakıt Türü: #{arac.yakitTuru}" />
+						<h:outputText value="Koltuk Sayısı: #{arac.koltukSayisi}" />
+						<h:outputText value="Günlük Ücret: #{arac.ucret}" />
+
+					</p:panelGrid>
+
+				</p:column>
+				<p:column headerText="Üyelik Bilgilerim">
+					<p:panelGrid columns="1" styleClass="ui-noborder">
+						<p:outputLabel value="Ad: #{uyeView.uye.ad}" />
+						<p:outputLabel value="Soyad: #{uyeView.uye.soyad}" />
+						<p:outputLabel value="Doğum Tarihi: #{uyeView.uye.dogumtarihi}" />
+						<p:outputLabel value="Telefon: #{uyeView.uye.telefon}" />
+						<p:outputLabel value="E-Posta: #{uyeView.uye.eposta}" />
+					</p:panelGrid>
+				</p:column>
+
+
+				<p:column headerText="Alış Tarihi">
+					<p:datePicker mindate="#{rezervasyonView.today}"
+						value="#{rezervasyonView.baslangicGun}"
+						disabledDates="#{rezervasyonView.invalidDates}"
+						readonlyInput="true" />
+				</p:column>
+
+				<p:column headerText="İade Tarihi">
+					<p:datePicker mindate="#{rezervasyonView.today}"
+						value="#{rezervasyonView.bitisGun}"
+						disabledDates="#{rezervasyonView.invalidDates}"
+						readonlyInput="true" />
+				</p:column>
+
+				<p:column headerText="Özet">
+
+					<p:panelGrid columns="1" styleClass="ui-noborder">
+						<p:commandButton update="kiralaForm"
+							action="#{rezervasyonView.ucretHesapla()}" value="Ücret Hesapla" />
+						<p:outputLabel
+							value="Toplam Ücret: #{rezervasyonView.toplamKiraUcreti}" />
+						<p:commandButton action="#{rezervasyonView.RandevuKaydet()}"
+							value="Randevu Al" update="messages"
+							rendered="#{rezervasyonView.toplamKiraUcreti>0}" />
+					</p:panelGrid>
+
+
+					<p:growl id="messages" showDetail="true" />
+				</p:column>
+			</p:dataTable>
+		</h:form>
+
+	</f:view>
+</body>
+</html>

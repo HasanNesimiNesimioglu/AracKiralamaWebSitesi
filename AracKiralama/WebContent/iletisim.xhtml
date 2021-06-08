@@ -1,0 +1,75 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<center style="background-color: #156CE1;">
+		<h1>
+			<font color="white"> <b> H/N ARAÇ KİRALAMA</b></font>
+		</h1>
+	</center>
+</h:head>
+
+<body>
+	<f:view>
+		<h:form id="hiletisimPanel">
+			<p:menubar>
+				<p:menuitem value="Ana Sayfa" outcome="/index" />
+				<p:menuitem value="Araçlar" outcome="/araclar" />
+				<p:menuitem value="İletişim" outcome="/iletisim" />
+				<p:menuitem value="Üye Ol/Giriş Yap" outcome="/uyegiris"
+					rendered="#{uyeView.uye.ad==null}" />
+				<p:menuitem value="Yönetici Girişi" outcome="/yoneticigiris" />
+				<f:facet name="options">
+					<div class="ui-input-icon-left p-mr-2">
+						<p:menuButton value="#{uyeView.uye.ad} #{uyeView.uye.soyad}"
+							rendered="#{uyeView.uye.ad!=null}" icon="pi pi-fw pi-user"
+							style="width:100%;">
+							<p:menuitem value="bilgilerim" icon="pi pi-fw pi-pencil"
+								outcome="/uyeprofil" />
+							<p:menuitem value="kiraladığım araçlar"
+								icon="pi pi-fw pi-calendar" outcome="/uyearaclar" />
+							<p:menuitem value="çıkış" ajax="false"
+								action="#{uyeView.cikis()}" update="hiletisimPanel"
+								icon="pi pi-fw pi-power-off" />
+						</p:menuButton>
+					</div>
+				</f:facet>
+			</p:menubar>
+		</h:form>
+
+		<h:form>
+
+
+
+			<p:panelGrid columns="2" styleClass="ui-noborder">
+
+				<p:panelGrid columns="1" styleClass="ui-noborder">
+					<h3 style="margin-left: 300px;">İletişim Bilgilerimiz</h3>
+					<h4 style="margin-left: 300px;">Emniyet mah, Gazi Üniversitesi
+						Rektörlüğü,</h4>
+					<h4 style="margin-left: 300px;">Bandırma Cd No:6/1, 06560
+						Yenimahalle/Ankara</h4>
+					<h4 style="margin-left: 300px;">+90 312 202 2000</h4>
+					<p style="margin-left: 300px;">
+						<a href="http://gazi.edu.tr">Gazi Web Sitesi</a>
+					</p>
+
+
+				</p:panelGrid>
+
+				<p style="margin-left: 300px; margin-top: 100px;">
+					<iframe
+						src="https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d1529.5509318454506!2d32.821313308270476!3d39.93911110137911!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1sgazi!5e0!3m2!1str!2str!4v1620216504827!5m2!1str!2str"
+						width="600" height="450" style="border: 0;" loading="lazy"></iframe>
+				</p>
+			</p:panelGrid>
+
+		</h:form>
+	</f:view>
+</body>
+</html>
